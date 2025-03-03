@@ -1,3 +1,4 @@
 function iniciarExamen() {
-    alert("\241El examen ha comenzado!");
+    console.log("Iniciando examen...");
+    window.location.href = "registro.html"; // Redirige al registro antes del examen
 }
