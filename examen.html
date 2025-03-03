@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examen</title>
 
-    <!-- Incluir estilos si los tienes -->
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- Incluir la biblioteca SheetJS desde la carpeta js/ -->
     <script src="js/xlsx.full.min.js"></script>
 
 </head>
@@ -22,6 +18,7 @@
     </div>
 
     <button onclick="finalizarExamen()">Finalizar Examen</button>
+    <br><br>
     <button onclick="descargarResultados()">Descargar Resultados en Excel</button>
 
     <script>
@@ -39,14 +36,8 @@
                 { pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina A"], correcta: 1 }
             ];
 
-            // Cargar preguntas en la página
             function cargarPreguntas() {
                 var contenedor = document.getElementById('preguntasContainer');
-
-                if (!contenedor) {
-                    console.error("No se encontró el contenedor de preguntas.");
-                    return;
-                }
 
                 preguntas.forEach((q, index) => {
                     var div = document.createElement('div');
@@ -58,26 +49,24 @@
                 });
             }
 
-            // Función para finalizar el examen y calcular la calificación
             function finalizarExamen() {
                 let puntaje = 0;
                 preguntas.forEach((q, index) => {
                     let seleccion = document.querySelector(`input[name="pregunta${index}"]:checked`);
                     if (seleccion) {
                         if (parseInt(seleccion.value) === q.correcta) {
-                            puntaje++; // Sumar punto si la respuesta es correcta
+                            puntaje++;
                         }
                     }
                 });
 
-                let calificacion = (puntaje / preguntas.length) * 10; // Convertir a escala de 10
-                localStorage.setItem('calificacion', calificacion.toFixed(2)); // Guardar la calificación
+                let calificacion = (puntaje / preguntas.length) * 10;
+                localStorage.setItem('calificacion', calificacion.toFixed(2));
 
                 alert(`Tu calificación es: ${calificacion.toFixed(2)}/10`);
-                window.location.href = "resultado.html"; // Redirigir a una página de resultados
+                window.location.href = "resultado.html";
             }
 
-            // Función para descargar los resultados en Excel
             function descargarResultados() {
                 var nombreExamen = "Examen de Medicina";
                 var fechaExamen = new Date().toISOString().split("T")[0];
@@ -91,23 +80,32 @@
                     "Calificación": localStorage.getItem('calificacion') || 'N/A'
                 }];
 
-                // Convertir los datos en formato Excel
                 var ws = XLSX.utils.json_to_sheet(resultados);
                 var wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Resultados");
 
-                // Descargar el archivo
                 XLSX.writeFile(wb, `Resultados_${fechaExamen}.xlsx`);
             }
 
-            // Hacer accesibles las funciones en el botón
+            function bloquearTrampas() {
+                document.addEventListener("visibilitychange", function() {
+                    if (document.hidden) {
+                        alert("Detectado cambio de pestaña. Examen finalizado.");
+                        window.location.href = "index.html";
+                    }
+                });
+            }
+
             window.finalizarExamen = finalizarExamen;
             window.descargarResultados = descargarResultados;
 
-            // Llamar a la función para cargar las preguntas
             cargarPreguntas();
+            bloquearTrampas();
         });
     </script>
+
+</body>
+</html>
 
 </body>
 </html>
