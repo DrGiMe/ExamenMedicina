@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado del Examen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    .aprobado { color: green; font-weight: bold; }
+    .reprobado { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Resultados del Examen</h1>
+  <h3 id="usuarioInfo"></h3>
+  <h2 id="calificacion"></h2>
+  <h3 id="mensaje"></h3>
+
+  <button onclick="volverInicio()">Volver al Inicio</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Recuperar datos del usuario y calificación
+      var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
+      var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
+      var calificacion = localStorage.getItem('calificacion') || '0';
+
+      document.getElementById('usuarioInfo').innerText = `Estudiante: ${nombre} (Sección: ${seccion})`;
+      document.getElementById('calificacion').innerText = `Tu calificación: ${calificacion}/10`;
+
+      // Definir mensaje según el puntaje
+      var mensaje = document.getElementById('mensaje');
+      if (parseFloat(calificacion) >= 8) {
+        mensaje.innerHTML = "¡Felicidades! Has aprobado el examen. 🎉";
+        mensaje.classList.add("aprobado");
+      } else {
+        mensaje.innerHTML = "Lo sentimos, no alcanzaste la calificación mínima. 😟";
+        mensaje.classList.add("reprobado");
+      }
+    });
+
+    // Función para regresar al inicio
+    function volverInicio() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
