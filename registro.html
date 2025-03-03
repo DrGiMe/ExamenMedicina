@@ -61,9 +61,11 @@
                 }
 
                 alert("✅ Registro exitoso. Redirigiendo al examen...");
-                setTimeout(() => {  // Espera 1 segundo y luego redirige
-                    window.location.href = "examen.html";  
-                }, 1000);
+
+                // Solución para que la redirección funcione en todos los navegadores
+                setTimeout(() => {  
+                    window.location.replace("examen.html");
+                }, 500);
             });
 
             // Bloqueo de copiar y pegar en todos los campos de entrada
