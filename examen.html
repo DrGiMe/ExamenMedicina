@@ -1,81 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Examen</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen</title>
+
+    <!-- Incluir estilos si los tienes -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Incluir la biblioteca SheetJS desde la carpeta js/ -->
+    <script src="js/xlsx.full.min.js"></script>
+
 </head>
 <body>
 
-  <h1>Examen en Proceso</h1>
-  <h3 id="usuarioInfo"></h3>
-  
-  <div id="preguntasContainer">
-    <!-- Aquí se cargarán las preguntas dinámicamente -->
-  </div>
+    <h1>Examen en Proceso</h1>
+    <h3 id="usuarioInfo"></h3>
+    
+    <div id="preguntasContainer">
+        <!-- Aquí se cargarán las preguntas dinámicamente -->
+    </div>
 
-  <button onclick="finalizarExamen()">Finalizar Examen</button>
+    <button onclick="finalizarExamen()">Finalizar Examen</button>
+    <button onclick="descargarResultados()">Descargar Resultados en Excel</button>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Recuperar información del usuario
-      var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
-      var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
-      document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} (Sección: ${seccion})`;
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Recuperar información del usuario
+            var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
+            var apellido = localStorage.getItem('apellidoUsuario') || 'Apellido';
+            var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
+            document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} ${apellido} (Sección: ${seccion})`;
 
-      // Definir preguntas del examen
-      var preguntas = [
-        { pregunta: "¿Cuál es la función del corazón?", opciones: ["Bombea sangre", "Filtra la sangre", "Produce hormonas"], correcta: 0 },
-        { pregunta: "¿Cuántos huesos tiene el cuerpo humano?", opciones: ["206", "210", "150"], correcta: 0 },
-        { pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina A"], correcta: 1 }
-      ];
+            // Definir preguntas del examen
+            var preguntas = [
+                { pregunta: "¿Cuál es la función del corazón?", opciones: ["Bombea sangre", "Filtra la sangre", "Produce hormonas"], correcta: 0 },
+                { pregunta: "¿Cuántos huesos tiene el cuerpo humano?", opciones: ["206", "210", "150"], correcta: 0 },
+                { pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina A"], correcta: 1 }
+            ];
 
-      // Cargar preguntas en la página
-      function cargarPreguntas() {
-        var contenedor = document.getElementById('preguntasContainer');
+            // Cargar preguntas en la página
+            function cargarPreguntas() {
+                var contenedor = document.getElementById('preguntasContainer');
 
-        if (!contenedor) {
-          console.error("No se encontró el contenedor de preguntas.");
-          return;
-        }
+                if (!contenedor) {
+                    console.error("No se encontró el contenedor de preguntas.");
+                    return;
+                }
 
-        preguntas.forEach((q, index) => {
-          var div = document.createElement('div');
-          div.innerHTML = `<p><strong>${index + 1}. ${q.pregunta}</strong></p>`;
-          q.opciones.forEach((op, i) => {
-            div.innerHTML += `<label><input type="radio" name="pregunta${index}" value="${i}"> ${op}</label><br>`;
-          });
-          contenedor.appendChild(div);
-        });
-      }
-
-      // Función para finalizar el examen y calcular la calificación
-      function finalizarExamen() {
-        let puntaje = 0;
-        preguntas.forEach((q, index) => {
-          let seleccion = document.querySelector(`input[name="pregunta${index}"]:checked`);
-          if (seleccion) {
-            if (parseInt(seleccion.value) === q.correcta) {
-              puntaje++; // Sumar punto si la respuesta es correcta
+                preguntas.forEach((q, index) => {
+                    var div = document.createElement('div');
+                    div.innerHTML = `<p><strong>${index + 1}. ${q.pregunta}</strong></p>`;
+                    q.opciones.forEach((op, i) => {
+                        div.innerHTML += `<label><input type="radio" name="pregunta${index}" value="${i}"> ${op}</label><br>`;
+                    });
+                    contenedor.appendChild(div);
+                });
             }
-          }
+
+            // Función para finalizar el examen y calcular la calificación
+            function finalizarExamen() {
+                let puntaje = 0;
+                preguntas.forEach((q, index) => {
+                    let seleccion = document.querySelector(`input[name="pregunta${index}"]:checked`);
+                    if (seleccion) {
+                        if (parseInt(seleccion.value) === q.correcta) {
+                            puntaje++; // Sumar punto si la respuesta es correcta
+                        }
+                    }
+                });
+
+                let calificacion = (puntaje / preguntas.length) * 10; // Convertir a escala de 10
+                localStorage.setItem('calificacion', calificacion.toFixed(2)); // Guardar la calificación
+
+                alert(`Tu calificación es: ${calificacion.toFixed(2)}/10`);
+                window.location.href = "resultado.html"; // Redirigir a una página de resultados
+            }
+
+            // Función para descargar los resultados en Excel
+            function descargarResultados() {
+                var nombreExamen = "Examen de Medicina";
+                var fechaExamen = new Date().toISOString().split("T")[0];
+
+                var resultados = [{
+                    "Fecha": fechaExamen,
+                    "Nombre del Examen": nombreExamen,
+                    "Sección": seccion,
+                    "Apellido": apellido,
+                    "Nombre": nombre,
+                    "Calificación": localStorage.getItem('calificacion') || 'N/A'
+                }];
+
+                // Convertir los datos en formato Excel
+                var ws = XLSX.utils.json_to_sheet(resultados);
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Resultados");
+
+                // Descargar el archivo
+                XLSX.writeFile(wb, `Resultados_${fechaExamen}.xlsx`);
+            }
+
+            // Hacer accesibles las funciones en el botón
+            window.finalizarExamen = finalizarExamen;
+            window.descargarResultados = descargarResultados;
+
+            // Llamar a la función para cargar las preguntas
+            cargarPreguntas();
         });
-
-        let calificacion = (puntaje / preguntas.length) * 10; // Convertir a escala de 10
-        localStorage.setItem('calificacion', calificacion.toFixed(2)); // Guardar la calificación
-
-        alert(`Tu calificación es: ${calificacion.toFixed(2)}/10`);
-        window.location.href = "resultado.html"; // Redirigir a una página de resultados
-      }
-
-      // Llamar a la función para cargar las preguntas
-      cargarPreguntas();
-      
-      // Hacer que la función sea accesible globalmente
-      window.finalizarExamen = finalizarExamen;
-    });
-  </script>
+    </script>
 
 </body>
 </html>
