@@ -1,81 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Examen de Medicina</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro</title>
+  <script>
+    // Función que se ejecuta al hacer clic en "Iniciar Examen"
+    function iniciarExamen() {
+      // Obtener los valores de los campos de entrada
+      var nombre = document.getElementById('nombre').value;
+      var correo = document.getElementById('correo').value;
+      
+      // Validar que los campos no estén vacíos
+      if (nombre.trim() === '' || correo.trim() === '') {
+        alert('Por favor, completa todos los campos antes de iniciar el examen.');
+        return false;  // Detener la ejecución si falta algún dato
+      }
+      
+      // (Opcional) Guardar datos en almacenamiento local para usarlos en examen.html
+      // Esto permite recuperar el nombre o correo en la página de examen si se necesita.
+      localStorage.setItem('nombreUsuario', nombre);
+      localStorage.setItem('correoUsuario', correo);
+      
+      // Redirigir a la página del examen
+      window.location.href = 'examen.html';
+      return false; // Prevenir comportamiento predeterminado del botón/formulario
+    }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Registro para el Examen</h2>
-
-        <form id="registro-form">
-            <label for="nombre">Nombre(s):</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
-
-            <label for="apellido1">Primer Apellido:</label>
-            <input type="text" id="apellido1" name="apellido1" placeholder="Ingrese su primer apellido" required>
-
-            <label for="apellido2">Segundo Apellido:</label>
-            <input type="text" id="apellido2" name="apellido2" placeholder="Ingrese su segundo apellido" required>
-
-            <label for="correo">Correo Institucional (@umich.mx):</label>
-            <input type="email" id="correo" name="correo" placeholder="usuario@umich.mx" required>
-
-            <label for="matricula">Matrícula:</label>
-            <input type="text" id="matricula" name="matricula" placeholder="Ingrese su matrícula" required>
-
-            <label for="seccion">Sección:</label>
-            <select name="seccion" id="seccion" required>
-                <option value="">Selecciona tu sección</option>
-                <script>
-                    for (let i = 1; i <= 20; i++) {
-                        document.write(`<option value="${i}">Sección ${i}</option>`);
-                    }
-                </script>
-            </select>
-
-            <p id="error-msg" class="error"></p>
-
-            <button type="submit">Iniciar Examen</button>
-        </form>
-
-        <!-- Botón para volver al inicio -->
-        <button onclick="window.location.href='./index.html'">Volver al Inicio</button>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("registro-form");
-            const errorMsg = document.getElementById("error-msg");
-
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-                errorMsg.textContent = "";
-
-                const correo = document.getElementById("correo").value;
-                if (!correo.endsWith("@umich.mx")) {
-                    errorMsg.textContent = "⚠️ Debes usar un correo institucional (@umich.mx).";
-                    return;
-                }
-
-                alert("✅ Registro exitoso. Redirigiendo al examen...");
-
-                // Solución para que la redirección funcione en todos los navegadores
-                setTimeout(() => {  
-                    window.location.replace("examen.html");
-                }, 500);
-            });
-
-            // Bloqueo de copiar y pegar en todos los campos de entrada
-            document.querySelectorAll("input").forEach(input => {
-                input.addEventListener("copy", (event) => event.preventDefault());
-                input.addEventListener("paste", (event) => event.preventDefault());
-            });
-        });
-    </script>
-
-    <script src="seguridad.js"></script>
+  <h1>Formulario de Registro</h1>
+  <form id="formRegistro">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required /><br><br>
+    
+    <label for="correo">Correo electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required /><br><br>
+    
+    <!-- Botón para iniciar el examen después del registro -->
+    <button type="button" id="btnIniciar" onclick="iniciarExamen()">Iniciar Examen</button>
+  </form>
 </body>
 </html>
