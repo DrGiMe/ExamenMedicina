@@ -17,7 +17,7 @@ document.addEventListener("paste", function (event) {
     alert("⚠️ Pegar no está permitido.");
 });
 
-// 📌 3️⃣ Bloqueo de Herramientas de Desarrollador e Inspección
+// 📌 3️⃣ Bloqueo de Inspección de Código y DevTools
 setInterval(function () {
     if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
         alert("⚠️ Inspección detectada. El examen será cerrado.");
@@ -48,10 +48,23 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
-// 📌 5️⃣ Bloqueo de Capturas de Pantalla (PrintScreen, Cmd + Shift + 4)
+// 📌 5️⃣ Bloqueo de Capturas de Pantalla (PrintScreen, Cmd + Shift + 4) + Desenfoque Dinámico
+let desenfoqueActivo = false;
+
+const activarDesenfoque = () => {
+    if (!desenfoqueActivo) {
+        const style = document.createElement("style");
+        style.id = "desenfoqueCSS";
+        style.innerHTML = "body { filter: blur(10px); pointer-events: none; }";
+        document.head.appendChild(style);
+        desenfoqueActivo = true;
+    }
+};
+
 document.addEventListener("keydown", function (event) {
     if (event.key === "PrintScreen" || (event.metaKey && event.shiftKey && event.key === "4")) {
         event.preventDefault();
+        activarDesenfoque();
         alert("⚠️ Captura de pantalla detectada. El examen será cerrado.");
         window.location.href = "bloqueado.html";
     }
@@ -93,12 +106,22 @@ setInterval(() => {
     }
 }, 3000);
 
-// 📌 🔟 Desenfoque de Pantalla para Capturas con CSS
-const style = document.createElement("style");
-style.innerHTML = `
-@media (min-width: 300px) {
-    html {
-        filter: blur(10px);
-    }
-}`;
-document.head.appendChild(style);
+// 📌 🔟 Detección de IA (ChatGPT, Copilot, Google Bard)
+const detectAIUsage = () => {
+    const aiUrls = [
+        "chat.openai.com",
+        "copilot.microsoft.com",
+        "bard.google.com",
+        "perplexity.ai"
+    ];
+    
+    aiUrls.forEach(url => {
+        if (document.referrer.includes(url) || window.location.href.includes(url)) {
+            alert("⚠️ Uso de inteligencia artificial detectado. El examen será cerrado.");
+            window.location.href = "bloqueado.html";
+        }
+    });
+};
+
+// Ejecutar detección de IA cada 5 segundos
+setInterval(detectAIUsage, 5000);
