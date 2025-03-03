@@ -3,49 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Medicina</title>
+    <title>Registro - Examen de Medicina</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h2>Examen de Medicina</h2>
-        <p><strong>Tiempo restante:</strong> <span id="tiempo">10:00</span></p>
+        <h2>Registro para el Examen</h2>
 
-        <form id="examen-form">
-            <!-- Pregunta 1 -->
-            <div class="pregunta">
-                <h3>1. ¿Cuál es la unidad funcional del riñón?</h3>
-                <label><input type="radio" name="p1" value="nefrona"> Nefrona</label>
-                <label><input type="radio" name="p1" value="glomerulo"> Glomérulo</label>
-                <label><input type="radio" name="p1" value="tubulo"> Túbulo renal</label>
-            </div>
+        <form id="registro-form">
+            <label for="nombre">Nombre(s):</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
 
-            <!-- Pregunta 2 -->
-            <div class="pregunta">
-                <h3>2. ¿Qué hormona regula el azúcar en la sangre?</h3>
-                <label><input type="radio" name="p2" value="insulina"> Insulina</label>
-                <label><input type="radio" name="p2" value="glucagon"> Glucagón</label>
-                <label><input type="radio" name="p2" value="cortisol"> Cortisol</label>
-            </div>
+            <label for="apellido1">Primer Apellido:</label>
+            <input type="text" id="apellido1" name="apellido1" placeholder="Ingrese su primer apellido" required>
 
-            <!-- Pregunta 3 -->
-            <div class="pregunta">
-                <h3>3. ¿Qué parte del cerebro controla el equilibrio?</h3>
-                <label><input type="radio" name="p3" value="cerebelo"> Cerebelo</label>
-                <label><input type="radio" name="p3" value="hipotalamo"> Hipotálamo</label>
-                <label><input type="radio" name="p3" value="lobulo"> Lóbulo frontal</label>
-            </div>
+            <label for="apellido2">Segundo Apellido:</label>
+            <input type="text" id="apellido2" name="apellido2" placeholder="Ingrese su segundo apellido" required>
 
-            <!-- Botón para enviar respuestas -->
-            <button type="submit">Enviar Examen</button>
+            <label for="correo">Correo Institucional (@umich.mx):</label>
+            <input type="email" id="correo" name="correo" placeholder="usuario@umich.mx" required>
+
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" placeholder="Ingrese su matrícula" required>
+
+            <label for="seccion">Sección:</label>
+            <select name="seccion" id="seccion" required>
+                <option value="">Selecciona tu sección</option>
+                <script>
+                    for (let i = 1; i <= 20; i++) {
+                        document.write(`<option value="${i}">Sección ${i}</option>`);
+                    }
+                </script>
+            </select>
+
+            <p id="error-msg" class="error"></p>
+
+            <button type="submit">Iniciar Examen</button>
         </form>
 
-        <!-- Mensaje de resultado -->
-        <p id="resultado"></p>
+        <!-- Botón para volver al inicio -->
+        <button onclick="window.location.href='index.html'">Volver al Inicio</button>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("registro-form");
+            const errorMsg = document.getElementById("error-msg");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                errorMsg.textContent = "";
+
+                const correo = document.getElementById("correo").value;
+                if (!correo.endsWith("@umich.mx")) {
+                    errorMsg.textContent = "⚠️ Debes usar un correo institucional (@umich.mx).";
+                    return;
+                }
+
+                alert("✅ Registro exitoso. Redirigiendo al examen...");
+
+                // Solución definitiva para redirección
+                setTimeout(() => {
+                    window.location.assign("examen.html");
+                }, 500);
+            });
+
+            // Bloqueo de copiar y pegar en todos los campos de entrada
+            document.querySelectorAll("input").forEach(input => {
+                input.addEventListener("copy", (event) => event.preventDefault());
+                input.addEventListener("paste", (event) => event.preventDefault());
+            });
+        });
+    </script>
+
     <script src="seguridad.js"></script>
-    <script src="examen.js"></script>
 </body>
 </html>
-
