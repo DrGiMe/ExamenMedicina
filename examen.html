@@ -3,25 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen</title>
+    <title>Examen de Medicina</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Examen de Medicina</h2>
-    <form id="examen-form">
-        <div>
-            <h3>\277Cu\341l es la unidad funcional del ri\361\363n?</h3>
-            <input type="radio" name="pregunta1" value="Nefrona"> Nefrona<br>
-            <input type="radio" name="pregunta1" value="Glom\351rulo"> Glom\351rulo<br>
-        </div>
-        <div>
-            <h3>\277Qu\351 tipo de c\351lula produce insulina?</h3>
-            <input type="radio" name="pregunta2" value="C\351lulas alfa"> C\351lulas alfa<br>
-            <input type="radio" name="pregunta2" value="C\351lulas beta"> C\351lulas beta<br>
-        </div>
-        <button type="submit">Enviar Examen</button>
-    </form>
-   <script src="seguridad.js"></script>
+    <div class="container">
+        <h2>Examen de Medicina</h2>
+        <p><strong>Tiempo restante:</strong> <span id="tiempo">10:00</span></p>
 
+        <form id="examen-form">
+            <!-- Pregunta 1 -->
+            <div class="pregunta">
+                <h3>1. ¿Cuál es la unidad funcional del riñón?</h3>
+                <label><input type="radio" name="p1" value="nefrona"> Nefrona</label>
+                <label><input type="radio" name="p1" value="glomerulo"> Glomérulo</label>
+                <label><input type="radio" name="p1" value="tubulo"> Túbulo renal</label>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="pregunta">
+                <h3>2. ¿Qué hormona regula el azúcar en la sangre?</h3>
+                <label><input type="radio" name="p2" value="insulina"> Insulina</label>
+                <label><input type="radio" name="p2" value="glucagon"> Glucagón</label>
+                <label><input type="radio" name="p2" value="cortisol"> Cortisol</label>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="pregunta">
+                <h3>3. ¿Qué parte del cerebro controla el equilibrio?</h3>
+                <label><input type="radio" name="p3" value="cerebelo"> Cerebelo</label>
+                <label><input type="radio" name="p3" value="hipotalamo"> Hipotálamo</label>
+                <label><input type="radio" name="p3" value="lobulo"> Lóbulo frontal</label>
+            </div>
+
+            <!-- Botón para enviar respuestas -->
+            <button type="submit">Enviar Examen</button>
+        </form>
+
+        <!-- Mensaje de resultado -->
+        <p id="resultado"></p>
+    </div>
+
+    <script src="seguridad.js"></script>
+    <script src="examen.js"></script>
 </body>
 </html>
+
