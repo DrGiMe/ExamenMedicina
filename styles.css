@@ -1,9 +1,35 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    padding: 20px;
+    margin: 20px;
 }
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
 button {
+    background-color: #007bff;
+    color: white;
     padding: 10px;
-    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+}
+
+.pregunta {
+    margin-bottom: 15px;
 }
