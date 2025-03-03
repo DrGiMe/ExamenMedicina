@@ -98,11 +98,14 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
-// 📌 9️⃣ Bloqueo de Software de Grabación de Pantalla (OBS, ShadowPlay)
+// 📌 9️⃣ Bloqueo de Software de Grabación (OBS, ShadowPlay) con Mejoras
 setInterval(() => {
-    if (window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100) {
-        alert("⚠️ Software de grabación detectado. El examen ha sido cerrado.");
-        window.location.href = "bloqueado.html";
+    // Detectar solo en computadoras (Evita bloqueos en móviles)
+    if (navigator.userAgent.includes("Windows") || navigator.userAgent.includes("Macintosh")) {
+        if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
+            alert("⚠️ Software de grabación detectado. El examen ha sido cerrado.");
+            window.location.href = "bloqueado.html";
+        }
     }
 }, 3000);
 
