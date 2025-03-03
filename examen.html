@@ -6,19 +6,51 @@
   <title>Examen</title>
 </head>
 <body>
+
   <h1>Examen en Proceso</h1>
-  <p>Responde todas las preguntas antes de enviar el examen.</p>
+  <h3 id="usuarioInfo"></h3>
+  
+  <div id="preguntasContainer">
+    <!-- Aquí se cargarán las preguntas dinámicamente -->
+  </div>
+
+  <button onclick="finalizarExamen()">Finalizar Examen</button>
 
   <script>
-    // Recuperar el nombre y la sección del usuario para mostrar en el examen
+    // Recuperar información del usuario
     var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
     var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
-    document.write(`<h3>Bienvenido, ${nombre} (Sección: ${seccion})</h3>`);
+    document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} (Sección: ${seccion})`;
+
+    // Definir preguntas del examen
+    var preguntas = [
+      { pregunta: "¿Cuál es la función del corazón?", opciones: ["Bombea sangre", "Filtra la sangre", "Produce hormonas"], correcta: 0 },
+      { pregunta: "¿Cuántos huesos tiene el cuerpo humano?", opciones: ["206", "210", "150"], correcta: 0 },
+      { pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina A"], correcta: 1 }
+    ];
+
+    // Cargar preguntas en la página
+    function cargarPreguntas() {
+      var contenedor = document.getElementById('preguntasContainer');
+      preguntas.forEach((q, index) => {
+        var div = document.createElement('div');
+        div.innerHTML = `<p>${index + 1}. ${q.pregunta}</p>`;
+        q.opciones.forEach((op, i) => {
+          div.innerHTML += `<input type="radio" name="pregunta${index}" value="${i}"> ${op} <br>`;
+        });
+        contenedor.appendChild(div);
+      });
+    }
+
+    // Función para finalizar el examen
+    function finalizarExamen() {
+      alert("Examen finalizado. Gracias por participar.");
+      window.location.href = "resultado.html"; // Redirigir a una página de resultados
+    }
+
+    // Cargar preguntas al abrir la página
+    cargarPreguntas();
   </script>
 
-</body>
-</html>
-
-    <script src="seguridad.js"></script>
 </body>
 </html>
