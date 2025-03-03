@@ -30,7 +30,7 @@
             <select name="seccion" id="seccion" required>
                 <option value="">Selecciona tu sección</option>
                 <script>
-                    for (let i = 1; i <= 21; i++) {
+                    for (let i = 1; i <= 20; i++) {
                         document.write(`<option value="${i}">Sección ${i}</option>`);
                     }
                 </script>
@@ -61,7 +61,9 @@
                 }
 
                 alert("✅ Registro exitoso. Redirigiendo al examen...");
-                window.location.href = "./examen.html";  // Redirección corregida
+                setTimeout(() => {  // Espera 1 segundo y luego redirige
+                    window.location.href = "examen.html";  
+                }, 1000);
             });
 
             // Bloqueo de copiar y pegar en todos los campos de entrada
