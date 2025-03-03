@@ -1,61 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Examen</title>
 </head>
 <body>
 
-  <h1>Formulario de Registro</h1>
+    <h1>Registro para el Examen</h1>
 
-  <form id="formRegistro">
-    <label for="nombre">Nombre:</label><br>
-    <input type="text" id="nombre" name="nombre" required><br><br>
+    <form id="registro-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
 
-    <label for="correo">Correo electrónico:</label><br>
-    <input type="email" id="correo" name="correo" required><br><br>
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" required>
 
-    <label for="seccion">Sección:</label>
-    <select id="seccion" name="seccion" required>
-      <option value="" selected disabled>Selecciona una sección</option>
-      <!-- Generamos opciones del 1 al 20 -->
-      <script>
-        for (let i = 1; i <= 21; i++) {
-          document.write(`<option value="${i}">${i}</option>`);
+        <label for="correo">Correo Institucional (@umich.mx):</label>
+        <input type="email" id="correo" required>
+
+        <label for="matricula">Matrícula:</label>
+        <input type="text" id="matricula" required>
+
+        <label for="seccion">Sección:</label>
+        <select id="seccion" required>
+            <option value="" selected disabled>Selecciona tu sección</option>
+            <script>
+                for (let i = 1; i <= 20; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select>
+
+        <button type="button" onclick="iniciarExamen()">Iniciar Examen</button>
+    </form>
+
+    <script>
+        function iniciarExamen() {
+            const nombre = document.getElementById("nombre").value.trim();
+            const apellido = document.getElementById("apellido").value.trim();
+            const correo = document.getElementById("correo").value.trim();
+            const matricula = document.getElementById("matricula").value.trim();
+            const seccion = document.getElementById("seccion").value;
+
+            if (!nombre || !apellido || !correo || !matricula || !seccion) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            if (!correo.endsWith("@umich.mx")) {
+                alert("El correo debe ser institucional (@umich.mx).");
+                return;
+            }
+
+            // Guardar los datos en localStorage
+            localStorage.setItem("nombreUsuario", nombre);
+            localStorage.setItem("apellidoUsuario", apellido);
+            localStorage.setItem("correoUsuario", correo);
+            localStorage.setItem("matriculaUsuario", matricula);
+            localStorage.setItem("seccionUsuario", seccion);
+
+            window.location.href = "examen.html";
         }
-      </script>
-    </select>
-    <br><br>
-
-    <button type="button" id="btnIniciar">Iniciar Examen</button>
-  </form>
-
-  <script>
-    // Esperamos a que el documento cargue completamente antes de agregar el evento
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("btnIniciar").addEventListener("click", function() {
-        // Obtenemos los valores ingresados
-        var nombre = document.getElementById('nombre').value.trim();
-        var correo = document.getElementById('correo').value.trim();
-        var seccion = document.getElementById('seccion').value;
-
-        // Validamos que no haya campos vacíos
-        if (nombre === '' || correo === '' || seccion === '') {
-          alert('Por favor, completa todos los campos antes de iniciar el examen.');
-          return;
-        }
-
-        // Guardamos los datos en localStorage para usarlos en examen.html
-        localStorage.setItem('nombreUsuario', nombre);
-        localStorage.setItem('correoUsuario', correo);
-        localStorage.setItem('seccionUsuario', seccion);
-
-        // Redirigimos a examen.html
-        window.location.href = 'examen.html';
-      });
-    });
-  </script>
+    </script>
 
 </body>
 </html>
