@@ -5,40 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examen de Medicina</title>
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Cargar librería XLSX para exportar a Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <h1>Examen de Medicina</h1>
-    <p>Responde las siguientes preguntas:</p>
 
-    <form id="examenForm">
-        <label>1. ¿Cuál es la función principal del corazón?</label><br>
-        <input type="radio" name="q1" value="incorrecto"> Filtrar la sangre<br>
-        <input type="radio" name="q1" value="correcto"> Bombear sangre<br>
-        <input type="radio" name="q1" value="incorrecto"> Producir oxígeno<br>
-        <br>
+    <div id="preguntas">
+        <p><strong>1. ¿Cuál es el órgano encargado de bombear la sangre en el cuerpo humano?</strong></p>
+        <input type="radio" name="q1" value="Corazón"> Corazón<br>
+        <input type="radio" name="q1" value="Pulmones"> Pulmones<br>
+        <input type="radio" name="q1" value="Riñones"> Riñones<br>
 
-        <label>2. ¿Qué órgano es responsable de la digestión de los alimentos?</label><br>
-        <input type="radio" name="q2" value="correcto"> Estómago<br>
-        <input type="radio" name="q2" value="incorrecto"> Pulmones<br>
-        <input type="radio" name="q2" value="incorrecto"> Riñones<br>
-        <br>
+        <p><strong>2. ¿Qué tipo de tejido conecta los músculos con los huesos?</strong></p>
+        <input type="radio" name="q2" value="Tendones"> Tendones<br>
+        <input type="radio" name="q2" value="Cartílago"> Cartílago<br>
+        <input type="radio" name="q2" value="Ligamentos"> Ligamentos<br>
 
-        <label>3. ¿Cuál es la unidad básica de la vida?</label><br>
-        <input type="radio" name="q3" value="correcto"> Célula<br>
-        <input type="radio" name="q3" value="incorrecto"> Átomo<br>
-        <input type="radio" name="q3" value="incorrecto"> Tejido<br>
-        <br>
+        <p><strong>3. ¿Cuál es la función principal de los glóbulos rojos?</strong></p>
+        <input type="radio" name="q3" value="Transportar oxígeno"> Transportar oxígeno<br>
+        <input type="radio" name="q3" value="Defender contra infecciones"> Defender contra infecciones<br>
+        <input type="radio" name="q3" value="Ayudar en la coagulación"> Ayudar en la coagulación<br>
+    </div>
 
-        <button type="button" onclick="calcularCalificacion()">Finalizar Examen</button>
-    </form>
+    <button onclick="calcularCalificacion()">Finalizar Examen</button>
+    <button onclick="descargarExcel()">Descargar Resultados</button>
 
-    <h2 id="resultado" style="display:none;"></h2>
-    
-    <button id="descargarResultados" style="display:none;" onclick="descargarExcel()">Descargar Resultados</button>
+    <p id="resultado"></p>
 
-    <!-- Cargar librería de Excel -->
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <script src="js/xlsx.full.min.js"></script>
-
+    <script src="js/examen.js"></script>
 </body>
 </html>
