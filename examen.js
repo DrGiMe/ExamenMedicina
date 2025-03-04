@@ -100,17 +100,102 @@ document.addEventListener("DOMContentLoaded", function () {
     let nombre = localStorage.getItem("nombre");
     let apellido1 = localStorage.getItem("apellido1");
     let apellido2 = localStorage.getItem("apellido2");
+    let correo = localStorage.getItem("correo");
+    let matricula = localStorage.getItem("matricula");
+    let seccion = localStorage.getItem("seccion");
 
-    // Si no hay datos registrados, redirigir al registro
     if (!nombre || !apellido1 || !apellido2) {
         alert("No hay un usuario registrado. Redirigiendo al registro...");
         window.location.href = "registro.html";
         return;
     }
 
-    console.log("✅ Datos del usuario cargados correctamente.");
-
-    // Mostrar un mensaje de bienvenida
     document.getElementById("bienvenida").innerText = `Bienvenido, ${nombre} ${apellido1} ${apellido2}`;
+
+    console.log("✅ Usuario cargado correctamente.");
 });
 
+function calcularCalificacion() {
+    let respuestas = {
+        q1: "Corazón",
+        q2: "Tendones"
+    };
+
+    let aciertos = 0;
+    let totalPreguntas = Object.keys(respuestas).length;
+
+    for (let key in respuestas) {
+        let seleccionada = document.querySelector(`input[name="${key}"]:checked`);
+        if (seleccionada && seleccionada.value === respuestas[key]) {
+            aciertos++;
+        }
+    }
+
+    let calificacion = (aciertos / totalPreguntas) * 100;
+    document.getElementById("resultado").innerText = `Tu calificación: ${calificacion.toFixed(2)}`;
+
+    localStorage.setItem("calificacion", calificacion.toFixed(2));
+    console.log(`✅ Calificación calculada: ${calificacion}`);
+}
+
+function descargarExcel() {
+    let nombre = localStorage.getItem("nombre");
+    let apellido1 = localStorage.getItem("apellido1");
+    let apellido2 = localStorage.getItem("apellido2");
+    let correo = localStorage.getItem("correo");
+    let matricula = localStorage.getItem("matricula");
+    let seccion = localStorage.getItem("seccion");
+    let calificacion = localStorage.getItem("calificacion");
+    let fecha = new Date().toLocaleDateString();
+
+    let datos = [
+        ["Nombre", "Apellido Paterno", "Apellido Materno", "Correo", "Matrícula", "Sección", "Calificación", "Fecha"],
+        [nombre, apellido1, apellido2, correo, matricula, seccion, calificacion, fecha]
+    ];
+
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.aoa_to_sheet(datos);
+    XLSX.utils.book_append_sheet(wb, ws, "Resultados");
+    XLSX.writeFile(wb, "Resultados_Examen.xlsx");
+
+    console.log("✅ Archivo Excel generado.");
+}
+🔹 3. examen.html (Formulario del examen)
+Incluye la lógica de preguntas y botones funcionales.
+
+html
+Copiar
+Editar
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Medicina</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1 id="bienvenida">Cargando...</h1>
+
+    <form id="examenForm">
+        <p>1. ¿Qué órgano bombea la sangre en el cuerpo humano?</p>
+        <input type="radio" name="q1" value="Pulmones"> Pulmones<br>
+        <input type="radio" name="q1" value="Hígado"> Hígado<br>
+        <input type="radio" name="q1" value="Corazón"> Corazón<br>
+
+        <p>2. ¿Qué estructura conecta los músculos con los huesos?</p>
+        <input type="radio" name="q2" value="Arterias"> Arterias<br>
+        <input type="radio" name="q2" value="Tendones"> Tendones<br>
+        <input type="radio" name="q2" value="Cartílago"> Cartílago<br>
+
+        <button type="button" onclick="calcularCalificacion()">Finalizar Examen</button>
+    </form>
+
+    <p id="resultado"></p>
+    <button onclick="descargarExcel()">Descargar Resultados</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="js/examen.js"></script>
+</body>
+</html>
