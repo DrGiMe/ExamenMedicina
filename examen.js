@@ -96,4 +96,21 @@ function descargarExcel() {
 }
 
 // Cargar datos del usuario al abrir la página
-document.addEventListener("DOMContentLoaded", cargarDatosUsuario);
+document.addEventListener("DOMContentLoaded", function () {
+    let nombre = localStorage.getItem("nombre");
+    let apellido1 = localStorage.getItem("apellido1");
+    let apellido2 = localStorage.getItem("apellido2");
+
+    // Si no hay datos registrados, redirigir al registro
+    if (!nombre || !apellido1 || !apellido2) {
+        alert("No hay un usuario registrado. Redirigiendo al registro...");
+        window.location.href = "registro.html";
+        return;
+    }
+
+    console.log("✅ Datos del usuario cargados correctamente.");
+
+    // Mostrar un mensaje de bienvenida
+    document.getElementById("bienvenida").innerText = `Bienvenido, ${nombre} ${apellido1} ${apellido2}`;
+});
+
