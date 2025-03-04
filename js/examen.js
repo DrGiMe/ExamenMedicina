@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     cargarPreguntas();
     document.getElementById("btnFinalizar").addEventListener("click", finalizarExamen);
@@ -57,6 +58,14 @@ function guardarResultados(calificacion) {
     let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
     resultados.push({ nombre, apellidoP, apellidoM, correo, matricula, seccion, calificacion, fecha });
 
+    // 🔹 Ordenar por sección y apellido paterno
+    resultados.sort((a, b) => {
+        if (a.seccion === b.seccion) {
+            return a.apellidoP.localeCompare(b.apellidoP);
+        }
+        return a.seccion - b.seccion;
+    });
+
     localStorage.setItem("resultados", JSON.stringify(resultados));
 }
 
@@ -73,14 +82,6 @@ function descargarExcel() {
         alert("No hay resultados para descargar.");
         return;
     }
-
-    // 🔹 Ordenar por sección y apellido paterno
-    datos.sort((a, b) => {
-        if (a.seccion === b.seccion) {
-            return a.apellidoP.localeCompare(b.apellidoP);
-        }
-        return a.seccion - b.seccion;
-    });
 
     // 🔹 Crear la hoja de Excel con los datos
     let ws_data = [
