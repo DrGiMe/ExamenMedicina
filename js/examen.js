@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnDescargar").addEventListener("click", descargarExcel);
 });
 
-// 📝 Lista de preguntas (ejemplo, debes cargar las reales)
+// 📝 Lista de preguntas (ejemplo, puedes agregar más)
 let preguntas = [
     { id: 1, pregunta: "¿Cuál es el órgano más grande del cuerpo humano?", opciones: ["Corazón", "Piel", "Hígado", "Pulmones"], respuesta: "Piel" },
     { id: 2, pregunta: "¿Cuántos huesos tiene un adulto?", opciones: ["206", "215", "180", "195"], respuesta: "206" },
