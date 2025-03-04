@@ -7,29 +7,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h1 id="bienvenida">Cargando...</h1>
-
-    <form id="examenForm">
-        <p>1. ¿Qué órgano bombea la sangre en el cuerpo humano?</p>
-        <input type="radio" name="q1" value="Pulmones"> Pulmones<br>
-        <input type="radio" name="q1" value="Hígado"> Hígado<br>
-        <input type="radio" name="q1" value="Corazón"> Corazón<br>
-
-        <p>2. ¿Qué estructura conecta los músculos con los huesos?</p>
-        <input type="radio" name="q2" value="Arterias"> Arterias<br>
-        <input type="radio" name="q2" value="Tendones"> Tendones<br>
-        <input type="radio" name="q2" value="Cartílago"> Cartílago<br>
-
-        <button type="button" onclick="calcularCalificacion()">Finalizar Examen</button>
-    </form>
-
+    <h1>Examen de Medicina</h1>
+    
+    <div id="preguntas"></div>
+    
+    <button id="btnFinalizar">Finalizar Examen</button>
     <p id="resultado"></p>
-    <button onclick="descargarExcel()">Descargar Resultados</button>
-    <script src="js/examen.js"></script>
-    <script src="js/guardarResultados.js"></script>
-    <script src="js/seguridad.js"></script>
-    <script src="js/registro.js"></script>
+    
+    <button id="btnDescargar">Descargar Resultados</button>
 
+    <!-- Librería para exportar a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="js/examen.js"></script>
 </body>
 </html>
