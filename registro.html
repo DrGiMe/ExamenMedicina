@@ -3,71 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Examen</title>
+    <title>Registro de Estudiante</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h1>Registro para el Examen</h1>
-
-    <form id="registro-form">
+    <h1>Registro de Estudiante</h1>
+    
+    <form id="registroForm">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" required>
+        <input type="text" id="nombre" required><br>
 
-        <label for="apellidoPaterno">Apellido Paterno:</label>
-        <input type="text" id="apellidoPaterno" required>
+        <label for="apellido1">Apellido Paterno:</label>
+        <input type="text" id="apellido1" required><br>
 
-        <label for="apellidoMaterno">Apellido Materno:</label>
-        <input type="text" id="apellidoMaterno" required>
+        <label for="apellido2">Apellido Materno:</label>
+        <input type="text" id="apellido2" required><br>
 
-        <label for="correo">Correo Institucional (@umich.mx):</label>
-        <input type="email" id="correo" required>
+        <label for="correo">Correo Institucional:</label>
+        <input type="email" id="correo" required><br>
 
         <label for="matricula">Matrícula:</label>
-        <input type="text" id="matricula" required>
+        <input type="text" id="matricula" required><br>
 
         <label for="seccion">Sección:</label>
         <select id="seccion" required>
-            <option value="" selected disabled>Selecciona tu sección</option>
+            <option value="" disabled selected>Selecciona una sección</option>
+            <!-- Secciones del 1 al 21 -->
             <script>
                 for (let i = 1; i <= 21; i++) {
-                    document.write(`<option value="${i}">${i}</option>`);
+                    document.write(`<option value="${i}">Sección ${i}</option>`);
                 }
             </script>
-        </select>
+        </select><br>
 
-        <button type="button" onclick="iniciarExamen()">Iniciar Examen</button>
+        <button type="button" onclick="guardarRegistro()">Iniciar Examen</button>
     </form>
 
-    <script>
-        function iniciarExamen() {
-            const nombre = document.getElementById("nombre").value.trim();
-            const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
-            const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
-            const correo = document.getElementById("correo").value.trim();
-            const matricula = document.getElementById("matricula").value.trim();
-            const seccion = document.getElementById("seccion").value;
-
-            if (!nombre || !apellidoPaterno || !apellidoMaterno || !correo || !matricula || !seccion) {
-                alert("Por favor, completa todos los campos.");
-                return;
-            }
-
-            if (!correo.endsWith("@umich.mx")) {
-                alert("El correo debe ser institucional (@umich.mx).");
-                return;
-            }
-
-            // Guardar los datos en localStorage
-            localStorage.setItem("nombreUsuario", nombre);
-            localStorage.setItem("apellidoPaternoUsuario", apellidoPaterno);
-            localStorage.setItem("apellidoMaternoUsuario", apellidoMaterno);
-            localStorage.setItem("correoUsuario", correo);
-            localStorage.setItem("matriculaUsuario", matricula);
-            localStorage.setItem("seccionUsuario", seccion);
-
-            window.location.href = "examen.html";
-        }
-    </script>
-
+    <script src="js/registro.js"></script>
 </body>
 </html>
