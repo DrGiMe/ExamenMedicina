@@ -5,34 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examen de Medicina</title>
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Cargar librería XLSX para exportar a Excel -->
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-    <h1>Examen de Medicina</h1>
 
-    <div id="preguntas">
-        <p><strong>1. ¿Cuál es el órgano encargado de bombear la sangre en el cuerpo humano?</strong></p>
-        <input type="radio" name="q1" value="Corazón"> Corazón<br>
+    <h1 id="bienvenida">Cargando...</h1>
+
+    <form id="examenForm">
+        <p>1. ¿Qué órgano bombea la sangre en el cuerpo humano?</p>
         <input type="radio" name="q1" value="Pulmones"> Pulmones<br>
-        <input type="radio" name="q1" value="Riñones"> Riñones<br>
+        <input type="radio" name="q1" value="Hígado"> Hígado<br>
+        <input type="radio" name="q1" value="Corazón"> Corazón<br>
 
-        <p><strong>2. ¿Qué tipo de tejido conecta los músculos con los huesos?</strong></p>
+        <p>2. ¿Qué estructura conecta los músculos con los huesos?</p>
+        <input type="radio" name="q2" value="Arterias"> Arterias<br>
         <input type="radio" name="q2" value="Tendones"> Tendones<br>
         <input type="radio" name="q2" value="Cartílago"> Cartílago<br>
-        <input type="radio" name="q2" value="Ligamentos"> Ligamentos<br>
 
-        <p><strong>3. ¿Cuál es la función principal de los glóbulos rojos?</strong></p>
-        <input type="radio" name="q3" value="Transportar oxígeno"> Transportar oxígeno<br>
-        <input type="radio" name="q3" value="Defender contra infecciones"> Defender contra infecciones<br>
-        <input type="radio" name="q3" value="Ayudar en la coagulación"> Ayudar en la coagulación<br>
-    </div>
-
-    <button onclick="calcularCalificacion()">Finalizar Examen</button>
-    <button onclick="descargarExcel()">Descargar Resultados</button>
+        <button type="button" onclick="calcularCalificacion()">Finalizar Examen</button>
+    </form>
 
     <p id="resultado"></p>
+    <button onclick="descargarExcel()">Descargar Resultados</button>
 
     <script src="js/examen.js"></script>
 </body>
