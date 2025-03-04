@@ -3,108 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen</title>
-
-    <script src="js/xlsx.full.min.js"></script>
-
+    <title>Examen de Medicina</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h1>Examen de Medicina</h1>
+    <p>Responde las siguientes preguntas:</p>
 
-    <h1>Examen en Proceso</h1>
-    <h3 id="usuarioInfo"></h3>
+    <form id="examenForm">
+        <label>1. ¿Cuál es la función principal del corazón?</label><br>
+        <input type="radio" name="q1" value="incorrecto"> Filtrar la sangre<br>
+        <input type="radio" name="q1" value="correcto"> Bombear sangre<br>
+        <input type="radio" name="q1" value="incorrecto"> Producir oxígeno<br>
+        <br>
+
+        <label>2. ¿Qué órgano es responsable de la digestión de los alimentos?</label><br>
+        <input type="radio" name="q2" value="correcto"> Estómago<br>
+        <input type="radio" name="q2" value="incorrecto"> Pulmones<br>
+        <input type="radio" name="q2" value="incorrecto"> Riñones<br>
+        <br>
+
+        <label>3. ¿Cuál es la unidad básica de la vida?</label><br>
+        <input type="radio" name="q3" value="correcto"> Célula<br>
+        <input type="radio" name="q3" value="incorrecto"> Átomo<br>
+        <input type="radio" name="q3" value="incorrecto"> Tejido<br>
+        <br>
+
+        <button type="button" onclick="calcularCalificacion()">Finalizar Examen</button>
+    </form>
+
+    <h2 id="resultado" style="display:none;"></h2>
     
-    <div id="preguntasContainer">
-        <!-- Aquí se cargarán las preguntas dinámicamente -->
-    </div>
+    <button id="descargarResultados" style="display:none;" onclick="descargarExcel()">Descargar Resultados</button>
 
-    <button onclick="finalizarExamen()">Finalizar Examen</button>
-    <br><br>
-    <button onclick="descargarResultados()">Descargar Resultados en Excel</button>
+    <!-- Cargar librería de Excel -->
+    <script src="js/xlsx.full.min.js"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Recuperar información del usuario
-            var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
-            var apellidoPaterno = localStorage.getItem('apellidoPaternoUsuario') || 'Apellido Paterno';
-            var apellidoMaterno = localStorage.getItem('apellidoMaternoUsuario') || 'Apellido Materno';
-            var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
-            document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} ${apellidoPaterno} ${apellidoMaterno} (Sección: ${seccion})`;
-
-            // Definir preguntas del examen
-            var preguntas = [
-                { pregunta: "¿Cuál es la función del corazón?", opciones: ["Bombea sangre", "Filtra la sangre", "Produce hormonas"], correcta: 0 },
-                { pregunta: "¿Cuántos huesos tiene el cuerpo humano?", opciones: ["206", "210", "150"], correcta: 0 },
-                { pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina A"], correcta: 1 }
-            ];
-
-            function cargarPreguntas() {
-                var contenedor = document.getElementById('preguntasContainer');
-
-                preguntas.forEach((q, index) => {
-                    var div = document.createElement('div');
-                    div.innerHTML = `<p><strong>${index + 1}. ${q.pregunta}</strong></p>`;
-                    q.opciones.forEach((op, i) => {
-                        div.innerHTML += `<label><input type="radio" name="pregunta${index}" value="${i}"> ${op}</label><br>`;
-                    });
-                    contenedor.appendChild(div);
-                });
-            }
-
-            function finalizarExamen() {
-                let puntaje = 0;
-                preguntas.forEach((q, index) => {
-                    let seleccion = document.querySelector(`input[name="pregunta${index}"]:checked`);
-                    if (seleccion) {
-                        if (parseInt(seleccion.value) === q.correcta) {
-                            puntaje++;
-                        }
-                    }
-                });
-
-                let calificacion = (puntaje / preguntas.length) * 10;
-                localStorage.setItem('calificacion', calificacion.toFixed(2));
-
-                alert(`Tu calificación es: ${calificacion.toFixed(2)}/10`);
-                window.location.href = "resultado.html";
-            }
-
-            function descargarResultados() {
-                var nombreExamen = "Examen de Medicina";
-                var fechaExamen = new Date().toISOString().split("T")[0];
-
-                var resultados = [{
-                    "Fecha": fechaExamen,
-                    "Nombre del Examen": nombreExamen,
-                    "Sección": seccion,
-                    "Apellido Paterno": apellidoPaterno,
-                    "Apellido Materno": apellidoMaterno,
-                    "Nombre": nombre,
-                    "Calificación": localStorage.getItem('calificacion') || 'N/A'
-                }];
-
-                var ws = XLSX.utils.json_to_sheet(resultados);
-                var wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Resultados");
-
-                XLSX.writeFile(wb, `Resultados_${fechaExamen}.xlsx`);
-            }
-
-            function bloquearTrampas() {
-                document.addEventListener("visibilitychange", function() {
-                    if (document.hidden) {
-                        alert("Detectado cambio de pestaña. Examen finalizado.");
-                        window.location.href = "index.html";
-                    }
-                });
-            }
-
-            window.finalizarExamen = finalizarExamen;
-            window.descargarResultados = descargarResultados;
-
-            cargarPreguntas();
-            bloquearTrampas();
-        });
-    </script>
-
+    <!-- Archivo de funciones JavaScript -->
+    <script src="js/examen.js"></script>
 </body>
 </html>
