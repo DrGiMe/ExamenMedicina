@@ -13,8 +13,11 @@
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" required>
 
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" required>
+        <label for="apellidoPaterno">Apellido Paterno:</label>
+        <input type="text" id="apellidoPaterno" required>
+
+        <label for="apellidoMaterno">Apellido Materno:</label>
+        <input type="text" id="apellidoMaterno" required>
 
         <label for="correo">Correo Institucional (@umich.mx):</label>
         <input type="email" id="correo" required>
@@ -38,12 +41,13 @@
     <script>
         function iniciarExamen() {
             const nombre = document.getElementById("nombre").value.trim();
-            const apellido = document.getElementById("apellido").value.trim();
+            const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
+            const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
             const correo = document.getElementById("correo").value.trim();
             const matricula = document.getElementById("matricula").value.trim();
             const seccion = document.getElementById("seccion").value;
 
-            if (!nombre || !apellido || !correo || !matricula || !seccion) {
+            if (!nombre || !apellidoPaterno || !apellidoMaterno || !correo || !matricula || !seccion) {
                 alert("Por favor, completa todos los campos.");
                 return;
             }
@@ -55,7 +59,8 @@
 
             // Guardar los datos en localStorage
             localStorage.setItem("nombreUsuario", nombre);
-            localStorage.setItem("apellidoUsuario", apellido);
+            localStorage.setItem("apellidoPaternoUsuario", apellidoPaterno);
+            localStorage.setItem("apellidoMaternoUsuario", apellidoMaterno);
             localStorage.setItem("correoUsuario", correo);
             localStorage.setItem("matriculaUsuario", matricula);
             localStorage.setItem("seccionUsuario", seccion);
