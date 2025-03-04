@@ -5,6 +5,24 @@ if (typeof XLSX === "undefined") {
     console.log("✅ Librería XLSX cargada correctamente.");
 }
 
+// Función para cargar los datos del usuario al iniciar el examen
+function cargarDatosUsuario() {
+    let nombre = localStorage.getItem("nombre") || "No registrado";
+    let apellidoPaterno = localStorage.getItem("apellido1") || "No registrado";
+    let apellidoMaterno = localStorage.getItem("apellido2") || "No registrado";
+    let correo = localStorage.getItem("correo") || "No registrado";
+    let matricula = localStorage.getItem("matricula") || "No registrada";
+    let seccion = localStorage.getItem("seccion") || "No registrada";
+
+    console.log("👤 Datos del usuario cargados:");
+    console.log(`Nombre: ${nombre}`);
+    console.log(`Apellido Paterno: ${apellidoPaterno}`);
+    console.log(`Apellido Materno: ${apellidoMaterno}`);
+    console.log(`Correo: ${correo}`);
+    console.log(`Matrícula: ${matricula}`);
+    console.log(`Sección: ${seccion}`);
+}
+
 // Función para calcular la calificación
 function calcularCalificacion() {
     let respuestasCorrectas = {
@@ -28,75 +46,54 @@ function calcularCalificacion() {
     let calificacion = (respuestasCorrectasUsuario / totalPreguntas) * 10;
     document.getElementById("resultado").innerText = `Tu calificación es: ${calificacion.toFixed(2)}`;
 
-    // Obtener datos del estudiante
-    let nombre = localStorage.getItem("nombre") || "No registrado";
-    let apellidoPaterno = localStorage.getItem("apellido1") || "No registrado";
-    let apellidoMaterno = localStorage.getItem("apellido2") || "No registrado";
-    let seccion = localStorage.getItem("seccion") || "No registrada";
     let fecha = new Date().toLocaleDateString();
 
-    // Guardar los resultados en localStorage como lista de estudiantes
-    let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
-    resultados.push({
-        nombre,
-        apellidoPaterno,
-        apellidoMaterno,
-        seccion,
-        calificacion: calificacion.toFixed(2),
-        fecha
-    });
+    // Obtener datos del usuario
+    let nombre = localStorage.getItem("nombre");
+    let apellido1 = localStorage.getItem("apellido1");
+    let apellido2 = localStorage.getItem("apellido2");
+    let correo = localStorage.getItem("correo");
+    let matricula = localStorage.getItem("matricula");
+    let seccion = localStorage.getItem("seccion");
 
-    // Guardar la lista actualizada
+    // Guardar resultados
+    let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
+    resultados.push({ nombre, apellido1, apellido2, correo, matricula, seccion, calificacion: calificacion.toFixed(2), fecha });
     localStorage.setItem("resultados", JSON.stringify(resultados));
 
     console.log("✅ Calificación calculada y guardada correctamente.");
 }
 
-// Función para descargar resultados en Excel ordenados por sección y apellido
+// Función para descargar los resultados en Excel
 function descargarExcel() {
-    if (typeof XLSX === "undefined") {
-        console.error("Error: XLSX no está definido. Verifica la carga del archivo xlsx.full.min.js.");
-        return;
-    }
-
     let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
 
     if (resultados.length === 0) {
-        console.warn("⚠ No hay resultados guardados.");
         alert("No hay resultados para descargar.");
         return;
     }
 
-    // Ordenar por sección y luego por apellido paterno
+    // Ordenar por sección y apellido
     resultados.sort((a, b) => {
         if (a.seccion !== b.seccion) {
-            return a.seccion - b.seccion; // Ordenar por sección
+            return a.seccion - b.seccion;
         }
-        return a.apellidoPaterno.localeCompare(b.apellidoPaterno); // Ordenar por apellido
+        return a.apellido1.localeCompare(b.apellido1);
     });
 
     // Crear datos para Excel
-    let ws_data = [
-        ["Nombre", "Apellido Paterno", "Apellido Materno", "Sección", "Calificación", "Fecha"]
-    ];
-
+    let ws_data = [["Nombre", "Apellido Paterno", "Apellido Materno", "Correo", "Matrícula", "Sección", "Calificación", "Fecha"]];
     resultados.forEach(estudiante => {
-        ws_data.push([
-            estudiante.nombre,
-            estudiante.apellidoPaterno,
-            estudiante.apellidoMaterno,
-            estudiante.seccion,
-            estudiante.calificacion,
-            estudiante.fecha
-        ]);
+        ws_data.push([estudiante.nombre, estudiante.apellido1, estudiante.apellido2, estudiante.correo, estudiante.matricula, estudiante.seccion, estudiante.calificacion, estudiante.fecha]);
     });
 
-    // Crear libro y hoja de Excel
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Resultados");
-
-    // Descargar archivo
     XLSX.writeFile(wb, "Resultados_Examen.xlsx");
-    console.log("✅ Archivo Excel generado correctamente con orden de sección y apellido.");
+
+    console.log("✅ Archivo Excel generado correctamente.");
 }
+
+// Cargar datos del usuario al abrir la página
+document.addEventListener("DOMContentLoaded", cargarDatosUsuario);
