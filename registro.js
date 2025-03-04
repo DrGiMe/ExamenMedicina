@@ -20,6 +20,8 @@ function guardarRegistro() {
     localStorage.setItem("matricula", matricula);
     localStorage.setItem("seccion", seccion);
 
+    console.log("✅ Datos guardados. Redirigiendo al examen...");
+
     // Redirigir al examen
     window.location.href = "examen.html";
 }
