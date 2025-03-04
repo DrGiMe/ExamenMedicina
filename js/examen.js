@@ -10,19 +10,23 @@ function calcularCalificacion() {
     // Mostrar botón de descarga
     document.getElementById("descargarResultados").style.display = "block";
 
-    // Guardar resultados
+    // Guardar resultados en localStorage
     localStorage.setItem("calificacion", resultadoTexto);
+    localStorage.setItem("fecha", new Date().toLocaleDateString());
 }
 
 function descargarExcel() {
     let calificacion = localStorage.getItem("calificacion") || "No disponible";
+    let fecha = localStorage.getItem("fecha") || new Date().toLocaleDateString();
 
-    // Crear hoja de datos
-    let ws = XLSX.utils.aoa_to_sheet([
+    // Crear hoja de datos con los encabezados y resultados
+    let ws_data = [
         ["Nombre", "Apellido Paterno", "Apellido Materno", "Sección", "Calificación", "Fecha"],
-        ["Juan", "Pérez", "López", "1", calificacion, new Date().toLocaleDateString()]
-    ]);
+        ["Juan", "Pérez", "López", "1", calificacion, fecha]
+    ];
 
+    // Convertir a hoja de Excel
+    let ws = XLSX.utils.aoa_to_sheet(ws_data);
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Resultados");
 
