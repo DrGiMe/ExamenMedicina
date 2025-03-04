@@ -25,9 +25,10 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Recuperar información del usuario
             var nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
-            var apellido = localStorage.getItem('apellidoUsuario') || 'Apellido';
+            var apellidoPaterno = localStorage.getItem('apellidoPaternoUsuario') || 'Apellido Paterno';
+            var apellidoMaterno = localStorage.getItem('apellidoMaternoUsuario') || 'Apellido Materno';
             var seccion = localStorage.getItem('seccionUsuario') || 'N/A';
-            document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} ${apellido} (Sección: ${seccion})`;
+            document.getElementById('usuarioInfo').innerText = `Bienvenido, ${nombre} ${apellidoPaterno} ${apellidoMaterno} (Sección: ${seccion})`;
 
             // Definir preguntas del examen
             var preguntas = [
@@ -75,7 +76,8 @@
                     "Fecha": fechaExamen,
                     "Nombre del Examen": nombreExamen,
                     "Sección": seccion,
-                    "Apellido": apellido,
+                    "Apellido Paterno": apellidoPaterno,
+                    "Apellido Materno": apellidoMaterno,
                     "Nombre": nombre,
                     "Calificación": localStorage.getItem('calificacion') || 'N/A'
                 }];
@@ -103,9 +105,6 @@
             bloquearTrampas();
         });
     </script>
-
-</body>
-</html>
 
 </body>
 </html>
