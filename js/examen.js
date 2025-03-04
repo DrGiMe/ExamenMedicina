@@ -1,99 +1,97 @@
-// Verificar si XLSX está disponible antes de continuar
-if (typeof XLSX === "undefined") {
-    console.error("Error: XLSX no está definido. Verifica la carga del archivo xlsx.full.min.js.");
-} else {
-    console.log("✅ Librería XLSX cargada correctamente.");
+document.addEventListener("DOMContentLoaded", function () {
+    cargarPreguntas();
+    document.getElementById("btnFinalizar").addEventListener("click", finalizarExamen);
+    document.getElementById("btnDescargar").addEventListener("click", descargarExcel);
+});
+
+// 📝 Lista de preguntas (ejemplo, debes cargar las reales)
+let preguntas = [
+    { id: 1, pregunta: "¿Cuál es el órgano más grande del cuerpo humano?", opciones: ["Corazón", "Piel", "Hígado", "Pulmones"], respuesta: "Piel" },
+    { id: 2, pregunta: "¿Cuántos huesos tiene un adulto?", opciones: ["206", "215", "180", "195"], respuesta: "206" },
+    { id: 3, pregunta: "¿Qué vitamina se obtiene del sol?", opciones: ["Vitamina C", "Vitamina D", "Vitamina B12", "Vitamina K"], respuesta: "Vitamina D" }
+];
+
+function cargarPreguntas() {
+    let contenedor = document.getElementById("preguntas");
+    contenedor.innerHTML = "";
+    preguntas.forEach((pregunta, index) => {
+        let div = document.createElement("div");
+        div.classList.add("pregunta");
+        div.innerHTML = `<p><b>${index + 1}.</b> ${pregunta.pregunta}</p>`;
+        pregunta.opciones.forEach(opcion => {
+            div.innerHTML += `<label><input type="radio" name="pregunta${index}" value="${opcion}"> ${opcion}</label><br>`;
+        });
+        contenedor.appendChild(div);
+    });
 }
 
-// Función para cargar los datos del usuario al iniciar el examen
-function cargarDatosUsuario() {
-    let nombre = localStorage.getItem("nombre") || "No registrado";
-    let apellidoPaterno = localStorage.getItem("apellido1") || "No registrado";
-    let apellidoMaterno = localStorage.getItem("apellido2") || "No registrado";
-    let correo = localStorage.getItem("correo") || "No registrado";
-    let matricula = localStorage.getItem("matricula") || "No registrada";
-    let seccion = localStorage.getItem("seccion") || "No registrada";
-
-    console.log("👤 Datos del usuario cargados:");
-    console.log(`Nombre: ${nombre}`);
-    console.log(`Apellido Paterno: ${apellidoPaterno}`);
-    console.log(`Apellido Materno: ${apellidoMaterno}`);
-    console.log(`Correo: ${correo}`);
-    console.log(`Matrícula: ${matricula}`);
-    console.log(`Sección: ${seccion}`);
-}
-
-// Función para calcular la calificación
-function calcularCalificacion() {
-    let respuestasCorrectas = {
-        q1: "Corazón",
-        q2: "Tendones",
-        q3: "Transportar oxígeno"
-    };
-
-    let totalPreguntas = Object.keys(respuestasCorrectas).length;
-    let respuestasCorrectasUsuario = 0;
-
-    for (let pregunta in respuestasCorrectas) {
-        let opciones = document.getElementsByName(pregunta);
-        for (let opcion of opciones) {
-            if (opcion.checked && opcion.value === respuestasCorrectas[pregunta]) {
-                respuestasCorrectasUsuario++;
-            }
+function finalizarExamen() {
+    let respuestasCorrectas = 0;
+    preguntas.forEach((pregunta, index) => {
+        let seleccionada = document.querySelector(`input[name="pregunta${index}"]:checked`);
+        if (seleccionada && seleccionada.value === pregunta.respuesta) {
+            respuestasCorrectas++;
         }
+    });
+
+    let calificacion = (respuestasCorrectas / preguntas.length) * 10;
+    calificacion = Math.round(calificacion * 100) / 100; // Redondeo a 2 decimales
+
+    document.getElementById("resultado").innerText = `Tu calificación es: ${calificacion}`;
+    
+    // Guardar resultados
+    guardarResultados(calificacion);
+}
+
+function guardarResultados(calificacion) {
+    let nombre = localStorage.getItem("nombre") || "Desconocido";
+    let apellidoP = localStorage.getItem("apellidoP") || "Desconocido";
+    let apellidoM = localStorage.getItem("apellidoM") || "Desconocido";
+    let correo = localStorage.getItem("correo") || "Desconocido";
+    let matricula = localStorage.getItem("matricula") || "Desconocido";
+    let seccion = localStorage.getItem("seccion") || "Desconocido";
+    let fecha = localStorage.getItem("fecha") || new Date().toLocaleDateString();
+
+    let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
+    resultados.push({ nombre, apellidoP, apellidoM, correo, matricula, seccion, calificacion, fecha });
+
+    localStorage.setItem("resultados", JSON.stringify(resultados));
+}
+
+function descargarExcel() {
+    if (typeof XLSX === "undefined") {
+        alert("Error: No se encontró la biblioteca XLSX.");
+        return;
     }
 
-    let calificacion = (respuestasCorrectasUsuario / totalPreguntas) * 10;
-    document.getElementById("resultado").innerText = `Tu calificación es: ${calificacion.toFixed(2)}`;
+    let datos = JSON.parse(localStorage.getItem("resultados")) || [];
 
-    let fecha = new Date().toLocaleDateString();
-
-    // Obtener datos del usuario
-    let nombre = localStorage.getItem("nombre");
-    let apellido1 = localStorage.getItem("apellido1");
-    let apellido2 = localStorage.getItem("apellido2");
-    let correo = localStorage.getItem("correo");
-    let matricula = localStorage.getItem("matricula");
-    let seccion = localStorage.getItem("seccion");
-
-    // Guardar resultados
-    let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
-    resultados.push({ nombre, apellido1, apellido2, correo, matricula, seccion, calificacion: calificacion.toFixed(2), fecha });
-    localStorage.setItem("resultados", JSON.stringify(resultados));
-
-    console.log("✅ Calificación calculada y guardada correctamente.");
-}
-
-// Función para descargar los resultados en Excel
-function descargarExcel() {
-    let resultados = JSON.parse(localStorage.getItem("resultados")) || [];
-
-    if (resultados.length === 0) {
+    if (datos.length === 0) {
         alert("No hay resultados para descargar.");
         return;
     }
 
     // Ordenar por sección y apellido
-    resultados.sort((a, b) => {
-        if (a.seccion !== b.seccion) {
-            return a.seccion - b.seccion;
+    datos.sort((a, b) => {
+        if (a.seccion === b.seccion) {
+            return a.apellidoP.localeCompare(b.apellidoP);
         }
-        return a.apellido1.localeCompare(b.apellido1);
+        return a.seccion - b.seccion;
     });
 
-    // Crear datos para Excel
-    let ws_data = [["Nombre", "Apellido Paterno", "Apellido Materno", "Correo", "Matrícula", "Sección", "Calificación", "Fecha"]];
-    resultados.forEach(estudiante => {
-        ws_data.push([estudiante.nombre, estudiante.apellido1, estudiante.apellido2, estudiante.correo, estudiante.matricula, estudiante.seccion, estudiante.calificacion, estudiante.fecha]);
+    // Crear la hoja de Excel
+    let ws_data = [
+        ["Nombre", "Apellido Paterno", "Apellido Materno", "Correo", "Matrícula", "Sección", "Calificación", "Fecha"]
+    ];
+    
+    datos.forEach(d => {
+        ws_data.push([d.nombre, d.apellidoP, d.apellidoM, d.correo, d.matricula, d.seccion, d.calificacion, d.fecha]);
     });
 
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Resultados");
+
+    // Descargar archivo
     XLSX.writeFile(wb, "Resultados_Examen.xlsx");
-
-    console.log("✅ Archivo Excel generado correctamente.");
 }
-
-// Cargar datos del usuario al abrir la página
-document.addEventListener("DOMContentLoaded", cargarDatosUsuario);
